@@ -99,16 +99,16 @@ export default new Router({
 Thiết lập kết nối đến CSDL
  
  - file `config/config.json`
-```json 
-{ // Ba môi trường làm việc
+```js 
+{ //Ba môi trường làm việc
   "development": { 
     "username": "postgres",  // username và password để đăng nhập vào PostgreSQL 
     "password": "abc",
-    "database": "vue_rest",    // tên CSDL 
-    "host"    : "localhost",       // địa chỉ ip, localhost tương ứng với 127.0.0.1 
-    "port"    : 5432,                 // cổng kết nối 
+    "database": "vue_rest",  // tên CSDL 
+    "host"    : "localhost", // địa chỉ ip, localhost tương ứng với 127.0.0.1 
+    "port"    : 5432,        // cổng kết nối 
     "dialect" : "postgres",
-    "schema"  : "public",       // tên schema chứa các bảng 
+    "schema"  : "public",    // tên schema chứa các bảng 
     "logging" : false
   },
   "test": {
