@@ -15,7 +15,7 @@
               <button class="destroy" @click="removeTodo(todo.id)"></button>
             </div>
             <input class="edit" type="text" v-model="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)"
-              @keyup.esc="cancelEdit(todo)">
+                   @keyup.esc="cancelEdit(todo)">
           </li>
         </ul>
       </section>
@@ -76,7 +76,7 @@
         }
       }
       // retrieve todo data from server
-      axios.get(`http://192.168.1.107:3000/api/todo-mvc/all`)
+      axios.get(`http://localhost:3000/api/todo-mvc/all`)
         .then(res => {
           this.todos = res.data
           this.visibility = this.$route.params.status
@@ -134,15 +134,15 @@
 
       addTodo: function () {
         var value = this.newTodo && this
-          .newTodo
-          .trim()
+            .newTodo
+            .trim()
         if (!value) {
           return
         }
-        axios.post('http://192.168.1.107:3000/api/todo-mvc/addTodo', {
-            title: value,
-            completed: false
-          })
+        axios.post('http://localhost:3000/api/todo-mvc/addTodo', {
+          title: value,
+          completed: false
+        })
           .then(res => {
             // this.todos.push(res.data[0])
             this.todos = res.data
@@ -154,16 +154,16 @@
       },
 
       removeTodo: function (id) {
-        axios.post('http://192.168.1.107:3000/api/todo-mvc/removeTodo', {
-            id
-          })
+        axios.post('http://localhost:3000/api/todo-mvc/removeTodo', {
+          id
+        })
           .then(res => {
             /*
-            let todo = this.todos.find(todo => {
-              return todo.id === res.data[0].id
-            })
-            this.todos.splice(this.todos.indexOf(todo), 1)
-            */
+             let todo = this.todos.find(todo => {
+             return todo.id === res.data[0].id
+             })
+             this.todos.splice(this.todos.indexOf(todo), 1)
+             */
             this.todos = res.data
           })
           .catch(err => {
@@ -173,17 +173,17 @@
 
       completeTodo: function (todo) {
         //todo.completed = !todo.completed
-        axios.post('http://192.168.1.107:3000/api/todo-mvc/completeTodo', {
-            todo
-          })
+        axios.post('http://localhost:3000/api/todo-mvc/completeTodo', {
+          todo
+        })
           .then(res => {
             /*
-            let todo = this.todos.find(todo => {
-              return todo.id === res.data[0].id
-            })
-            this.todos.splice(this.todos.indexOf(todo), 1, res.data[0])
-            */
-            
+             let todo = this.todos.find(todo => {
+             return todo.id === res.data[0].id
+             })
+             this.todos.splice(this.todos.indexOf(todo), 1, res.data[0])
+             */
+
             this.todos = res.data
             this.editedTodo = null
           })
@@ -202,16 +202,16 @@
           // todo.title = this.beforeEditCache
           return
         }
-        axios.post('http://192.168.1.107:3000/api/todo-mvc/editTodo', {
-            todo
-          })
+        axios.post('http://localhost:3000/api/todo-mvc/editTodo', {
+          todo
+        })
           .then(res => {
             /*
-            let todo = this.todos.find(todo => {
-              return todo.id === res.data[0].id
-            })
-            this.todos.splice(this.todos.indexOf(todo), 1, res.data[0])
-            */
+             let todo = this.todos.find(todo => {
+             return todo.id === res.data[0].id
+             })
+             this.todos.splice(this.todos.indexOf(todo), 1, res.data[0])
+             */
             this.todos = res.data
             this.editedTodo = null
           })
@@ -226,15 +226,15 @@
       },
 
       removeCompleted: function () {
-        axios.post('http://192.168.1.107:3000/api/todo-mvc/removeCompleted', {
-            completedTodos: this.filters.completed(this.todos)
-          })
+        axios.post('http://localhost:3000/api/todo-mvc/removeCompleted', {
+          completedTodos: this.filters.completed(this.todos)
+        })
           .then(res => {
             /*
-            this.todos = this.todos.filter(todo => {
-              return res.data.indexOf(todo.id) === -1;
-            });
-            */
+             this.todos = this.todos.filter(todo => {
+             return res.data.indexOf(todo.id) === -1;
+             });
+             */
             this.todos = res.data
           })
           .catch(err => {
