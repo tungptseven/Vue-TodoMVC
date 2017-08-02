@@ -53,14 +53,14 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 ```bash
  rest_api_todo_vue/
  --| config
- -----| config.json               // nơi khai báo các thông số để kết nối đến CSDL  
+ -----| config.json          // nơi khai báo các thông số để kết nối đến CSDL  
  --| migrations
  -----| 001.do.Todo.sql      // file sql chứa các câu lệnh tương tác với CSDL 
  --| test
- -----| 01_CreateTable.js  // file test để kiểm tra có kết nối được với CSDL được không
- --| index.js                        // file khởi tạo server cùng các REST api 
- --| pgp.js                           // file khởi tạo pg-promise để kết nối ứng dụng node với PostgreSQL server 
- --| package.json              // file khai báo các thông tin cơ bản của ứng dụng, node module cần cài đặt...
+ -----| 01_CreateTable.js    // file test để kiểm tra có kết nối được với CSDL được không
+ --| index.js                // file khởi tạo server cùng các REST api 
+ --| pgp.js                  // file khởi tạo pg-promise để kết nối ứng dụng node với PostgreSQL server 
+ --| package.json            // file khai báo các thông tin cơ bản của ứng dụng, node module cần cài đặt...
  --|....
 
 ```
