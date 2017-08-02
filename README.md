@@ -25,9 +25,18 @@ $ node index.js
 
 ## Build Setup
 
- - Chỉnh sửa đường dẫn đến REST server đang chạy, mặc định là `http://localhost:3000` trong file `/src/components/Todo.vue`
+ - Chỉnh sửa tất cả đường dẫn đến REST server đang chạy, mặc định là `http://localhost:3000` trong file `/src/components/Todo.vue`, ví dụ: 
+ 
+ ```js
+ ... 
+ axios.get(`http://localhost:3000/api/todo-mvc/all)
+ ... 
+ ```
 
 ``` bash
+
+$ cd Vue-TodoMVC
+
 $ npm install
 
 $ npm run dev
@@ -35,42 +44,6 @@ $ npm run dev
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-
-# Đổi Vue TodoMVC sang cấu trúc của Vuecli
-* Tách thành `Todo` và `Footer` components
-### Todo Component
-* Route: `/todo-mvc/:status` với status là `all`, `active`, `completed`. Đổi từ thẻ `<a>` sang `<router-link>`
-
-```js
-// src/router/index.js
-// khai báo route vào todo-mvc
-import Todo from '@/components/Todo'
-Vue.use(Router)
-
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/todo-mvc/:status',
-      name: 'Todo',
-      component: Todo
-    }
-  ]
-})
-```
-
-```html
-// src/components/Todo.vue
-<li><router-link :to="{name: 'Todo', params: {status: 'all'}}" :class="{ selected: visibility == 'all' }">All</router-link></li>
-<li><router-link :to="{name: 'Todo', params: {status: 'active'}}" :class="{ selected: visibility == 'active' }">Active</router-link></li>
-<li><router-link :to="{name: 'Todo', params: {status: 'completed'}}" :class="{ selected: visibility == 'completed' }">Completed</router-link></li>
-```
-
-* Vì tất cả các routes `/todo-mvc/:status` đều dùng chung components nên khi routes thay đổi vì component này cũng không đc render lại. Để theo dõi routes và hiển thị dữ liệu chính xác, ta có `watch` biến `$route`
 
 # REST api with ExpressJS
 
@@ -244,3 +217,40 @@ app.listen(port, () => {
 });
 
 ```
+
+# Đổi Vue TodoMVC sang cấu trúc của Vuecli
+* Tách thành `Todo` và `Footer` components
+### Todo Component
+* Route: `/todo-mvc/:status` với status là `all`, `active`, `completed`. Đổi từ thẻ `<a>` sang `<router-link>`
+
+```js
+// src/router/index.js
+// khai báo route vào todo-mvc
+import Todo from '@/components/Todo'
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'Hello',
+      component: Hello
+    },
+    {
+      path: '/todo-mvc/:status',
+      name: 'Todo',
+      component: Todo
+    }
+  ]
+})
+```
+
+```html
+// src/components/Todo.vue
+<li><router-link :to="{name: 'Todo', params: {status: 'all'}}" :class="{ selected: visibility == 'all' }">All</router-link></li>
+<li><router-link :to="{name: 'Todo', params: {status: 'active'}}" :class="{ selected: visibility == 'active' }">Active</router-link></li>
+<li><router-link :to="{name: 'Todo', params: {status: 'completed'}}" :class="{ selected: visibility == 'completed' }">Completed</router-link></li>
+```
+
+* Vì tất cả các routes `/todo-mvc/:status` đều dùng chung components nên khi routes thay đổi vì component này cũng không đc render lại. Để theo dõi routes và hiển thị dữ liệu chính xác, ta có `watch` biến `$route`
+
