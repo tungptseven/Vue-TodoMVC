@@ -270,14 +270,14 @@ export default new Router({
 ```
   Vue-TodoMVC/ 
   --| src 
-  -----| assets // thư mục chứa các tài nguyên như ảnh...
-  -----| components // thư mục chứa các file Vue components vai trò như các trang khác nhau của ứng dụng 
+  -----| assets        // thư mục chứa các tài nguyên như ảnh...
+  -----| components    // thư mục chứa các file Vue components vai trò như các trang khác nhau của ứng dụng 
   -----| router
   ----------| index.js // file khai báo các route - đường dẫn trỏ đến các component nào 
-  -----| App.vue // file Vue chính của ứng dụng, nơi sử dụng các Vue components
-  -----| main.js // khởi tạo một Vue object có id được tạo trong trang html chính
-  --| index.html // file html chính 
-  --| package.json       // file khai báo các thông tin cơ bản của ứng dụng, node module cần cài đặt...
+  -----| App.vue       // file Vue chính của ứng dụng, nơi sử dụng các Vue components
+  -----| main.js       // khởi tạo một Vue object có id được tạo trong trang html chính
+  --| index.html       // file html chính 
+  --| package.json     // file khai báo các thông tin cơ bản của ứng dụng, node module cần cài đặt...
   
   ...
  
