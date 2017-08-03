@@ -43,6 +43,14 @@ $ npm run dev
 
 ```
 
+## Result 
+
+- Database
+![db](./img/db.png)
+
+- Vue app 
+![app_vue](./img/vue.png)
+
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 # REST api with ExpressJS
@@ -50,7 +58,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 > Project rest_api_todo_vue có mục đích cung cấp một server chứa cơ sở dữ liệu (CSDL) với bảng todolist... và các REST api làm việc với chúng 
 
 ### Cấu trúc chính 
-```bash
+```
  rest_api_todo_vue/
  --| config
  -----| config.json               // nơi khai báo các thông số để kết nối đến CSDL  
@@ -61,7 +69,8 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
  --| index.js                        // file khởi tạo server cùng các REST api 
  --| pgp.js                           // file khởi tạo pg-promise để kết nối ứng dụng node với PostgreSQL server 
  --| package.json              // file khai báo các thông tin cơ bản của ứng dụng, node module cần cài đặt...
- --|....
+ 
+ ...
 
 ```
 
@@ -219,9 +228,10 @@ app.listen(port, () => {
 ```
 
 # Đổi Vue TodoMVC sang cấu trúc của Vuecli
-* Tách thành `Todo` và `Footer` components
+> Tách thành `Todo` và `Footer` components
+
 ### Todo Component
-* Route: `/todo-mvc/:status` với status là `all`, `active`, `completed`. Đổi từ thẻ `<a>` sang `<router-link>`
+- Route: `/todo-mvc/:status` với status là `all`, `active`, `completed`. Đổi từ thẻ `<a>` sang `<router-link>`
 
 ```js
 // src/router/index.js
@@ -252,5 +262,268 @@ export default new Router({
 <li><router-link :to="{name: 'Todo', params: {status: 'completed'}}" :class="{ selected: visibility == 'completed' }">Completed</router-link></li>
 ```
 
-* Vì tất cả các routes `/todo-mvc/:status` đều dùng chung components nên khi routes thay đổi vì component này cũng không đc render lại. Để theo dõi routes và hiển thị dữ liệu chính xác, ta có `watch` biến `$route`
+- Vì tất cả các routes `/todo-mvc/:status` đều dùng chung components nên khi routes thay đổi vì component này cũng không đc render lại. Để theo dõi routes và hiển thị dữ liệu chính xác, ta có `watch` biến `$route`
 
+# Vue-TodoMVC 
+
+### Cấu trúc chính 
+
+```
+  Vue-TodoMVC/ 
+  --| src 
+  -----| assets // thư mục chứa các tài nguyên như ảnh...
+  -----| components // thư mục chứa các file Vue components vai trò như các trang khác nhau của ứng dụng 
+  -----| router
+  ----------| index.js // file khai báo các route - đường dẫn trỏ đến các component nào 
+  -----| App.vue // file Vue chính của ứng dụng, nơi sử dụng các Vue components
+  -----| main.js // khởi tạo một Vue object có id được tạo trong trang html chính
+  --| index.html // file html chính 
+  --| package.json       // file khai báo các thông tin cơ bản của ứng dụng, node module cần cài đặt...
+  
+  ...
+ 
+ ```
+ 
+ ### Hoạt động 
+ > Ở project này ta tập trung vào file `src/components/Todo.vue` 
+ 
+ - file `App.vue ` :
+  
+  ```javascript 
+  <template>
+    <div id="app">
+    ...
+      <ul id="link_footer">
+        <li v-for="item in links"> // vòng lặp for cho từng object element trong mảng 'links', gán tên biến là 'items'
+          <router-link v-bind:to=item.link>{{ item.desc }}</router-link> // với mỗi object element, gán các key vào để lấy ra value 
+        </li>
+      </ul>
+    </div>
+  </template>
+  
+  <script>
+    export default {
+      name: 'app',
+      data() {
+        return {
+        // mảng dữ liệu 'links' được dùng ở trên 
+          links: [
+            // mỗi object element chứa các thông tin khác nhau, chính là đường dẫn để gọi đến các trang khác 
+            {
+              link: '/',        // trỏ đến trang chủ
+              desc: 'Hello World',
+              done: true
+            },
+            {
+              link: '/todo-mvc/all',  // trỏ đến trang '/todo-mvc/all', chính là trang Todo.vue được khai báo ở src/router/index.js 
+              desc: 'Todo MVC',
+              done: true
+            },
+          ]
+        }
+      },
+    }
+  </script>
+  ...
+  ```
+  
+- file `Todo.vue`
+
+```html
+<template>
+  <div>
+  <!-- các @keyup.enter, @click, @dbclick, @keyup.esc... gọi đến các hàm bên dưới ở phần <script> --> 
+    <section class="todoapp">
+      <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo">
+      </header>
+      <section class="main" v-show="todos.length" v-cloak>
+        <input class="toggle-all" type="checkbox" v-model="allDone">
+        <ul class="todo-list">
+        <!-- vòng lặp for cho mảng filteredTodos -->
+          <li v-for="todo in filteredTodos" class="todo" :key="todo.id" :class="{ completed: todo.completed, editing: todo == editedTodo }">
+            <div class="view">
+              <input class="toggle" type="checkbox" @click="completeTodo(todo)">
+              <!-- Lấy giá trị của key 'title' thuộc object 'todo' gán cho label -->
+              <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
+              <button class="destroy" @click="removeTodo(todo.id)"></button>
+            </div>
+            <input class="edit" type="text" v-model="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)"
+                   @keyup.esc="cancelEdit(todo)">
+          </li>
+        </ul>
+      </section>
+      <footer class="footer" v-show="todos.length" v-cloak>
+        <span class="todo-count"><strong>{{ remaining }}</strong> {{ remaining | pluralize }} left</span>
+        <ul class="filters">
+        <!-- Đường dẫn được khai báo trong file 'router/index.js' có dạng ~/todo-mvc/:status -->
+          <li>
+            <router-link :to="{name: 'Todo', params: {status: 'all'}}" :class="{ selected: visibility == 'all' }">All</router-link>
+          </li>
+          <li>
+            <router-link :to="{name: 'Todo', params: {status: 'active'}}" :class="{ selected: visibility == 'active' }">Active</router-link>
+          </li>
+          <li>
+            <router-link :to="{name: 'Todo', params: {status: 'completed'}}" :class="{ selected: visibility == 'completed' }">Completed</router-link>
+          </li>
+        </ul>
+        <button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">Clear completed</button>
+      </footer>
+    </section>
+    <todo-footer></todo-footer>
+  </div>
+</template>
+
+```
+```javascript
+<script>
+  ... 
+  
+  export default {
+
+    // dữ liệu được khai báo lần đầu trước khi các hàm được thực hiện 
+    data() {
+      return {
+        todos: [],
+        newTodo: '',
+        editedTodo: null,
+        visibility: 'all',
+        filters: null,
+        user: '',
+        showTodo: false
+      }
+    },
+    created() {
+      // visibility filters
+      this.filters = {
+        all: function (todos) {
+          return todos
+        },
+        active: function (todos) {
+          return todos.filter(function (todo) {
+            return !todo.completed
+          })
+        },
+        completed: function (todos) {
+          return todos.filter(function (todo) {
+            return todo.completed
+          })
+        }
+      }
+      // retrieve todo data from server
+      axios.get(`http://localhost:3000/api/todo-mvc/all`)
+        .then(res => {
+          this.todos = res.data
+          this.visibility = this.$route.params.status
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    // watch todos change for localStorage persistence
+    watch: {
+      todos: {
+        handler: function (todos) {}
+      },
+      '$route' (to, from) {
+        console.log('Change route ', this.$route.params.status);
+        this.visibility = this.$route.params.status;
+      }
+    },
+
+    // computed properties http://vuejs.org/guide/computed.html
+    computed: {
+      filteredTodos: function () {
+        return this.filters[this.visibility](this.todos)
+      },
+      remaining: function () {
+        return this.filters
+          .active(this.todos)
+          .length
+      },
+      allDone: {
+        get: function () {
+          return this.remaining === 0
+        },
+        set: function (value) {
+          this
+            .todos
+            .forEach(function (todo) {
+              todo.completed = value
+            })
+        }
+      }
+    },
+  
+    ... 
+
+    // methods that implement data logic. note there's no DOM manipulation here at
+    // all.
+    methods: {
+      
+      // hàm thêm 1 todoitem
+      addTodo: function () {
+        var value = this.newTodo && this
+            .newTodo
+            .trim()
+        if (!value) {
+          return
+        }
+        // axios gọi đến REST api ở server thực hiện truy vấn với CSDL
+        axios.post('http://localhost:3000/api/todo-mvc/addTodo', {
+          title: value,
+          completed: false
+        })
+          .then(res => {
+            // this.todos.push(res.data[0])
+            this.todos = res.data  // nhận được dữ liệu gán vào biến data
+            this.newTodo = ''
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+
+      removeTodo: function (id) {
+        ... 
+      },
+
+      completeTodo: function (todo) {
+        ... 
+      },
+
+      editTodo: function (todo) {
+        ... 
+      },
+
+      doneEdit: function (todo) {
+        ... 
+      },
+
+      cancelEdit: function (todo) {
+        ... 
+      },
+
+      removeCompleted: function () {
+        ... 
+      }
+    },
+
+    // a custom directive to wait for the DOM to be updated before focusing on the
+    // input field. http://vuejs.org/guide/custom-directive.html
+    directives: {
+      'todo-focus': function (el, binding) {
+        if (binding.value) {
+          el.focus()
+        }
+      }
+    },
+    components: {
+      todoFooter: Footer
+    }
+  }
+
+</script>
+
+```
